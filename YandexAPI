@@ -1,0 +1,55 @@
+"""
+Парсинг Яндекс-карт для получения
+гео-координат адресов
+"""
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.keys import Keys
+import pandas as pd
+import time
+import random
+import tqdm
+
+
+site_ya = 'https://yandex.ru/maps'
+
+# Получение координат адреса
+def get_koord_ya(df):
+    options = Options()
+    driver = webdriver.Chrome(chrome_options=options)
+    driver.get(site_ya)
+    time.sleep(10)
+
+    input = driver.find_element_by_class_name(
+        'input__control._bold')
+
+    for index in tqdm.tqdm(df.index.to_list()):
+        address = str(df.at[index, 'address'])
+        input.send_keys(address + '\n')
+        time.sleep(random.randint(2, 5))
+        try:
+            koord = driver.find_element_by_class_name(
+                'toponym-card-title-view__coords-badge')
+            value_koord = koord.text
+
+            adrs = driver.find_element_by_class_name(
+                'toponym-card-title-view__description')
+            value_address = adrs.text
+
+            df.at[index, 'Адрес координат'] = value_address
+            df.at[index, 'Координаты'] = value_koord
+        except Exception as e:
+            print(e.args)
+        time.sleep(random.randint(3, 6))
+        for i in range(120):
+            input.send_keys(Keys.BACKSPACE)
+
+    return df
+
+def start_func(path_file, path_out):
+    df = pd.read_excel(path_file, dtype=str)
+    df.fillna('', inplace=True)
+    df['Координаты'] = ''
+    df['Адрес координат'] = ''
+    df = get_koord_ya(df)
+    df.to_excel(path_out, index=False)
