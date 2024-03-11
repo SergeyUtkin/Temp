@@ -1,0 +1,84 @@
+browser.get('https://2gis.ru/kirov/search/Кировская область сбербанк банкомат')
+
+
+aa = []
+for c in range(200):
+    
+    print(c + 1)
+    but_next = browser.find_elements(By.CLASS_NAME,'_n5hmn94')
+    if c<16:
+        browser.execute_script("arguments[0].scrollIntoView(true);", but_next[max(0,len(but_next)-1)])
+        time.sleep(1)
+        but_next[max(0,len(but_next)-1)].click()
+        time.sleep(3)
+        continue
+    g = browser.find_element(By.CLASS_NAME,'_awwm2v')
+    elem = browser.find_elements(By.CLASS_NAME, "_1kf6gff")
+    
+    for i in range(len(elem)):
+        
+            
+        bb = []
+        bb.append(datetime.datetime.now())
+        try:
+            e = elem[i].find_element(By.CLASS_NAME, '_klarpw')
+        except:
+            e = elem[i].find_element(By.CLASS_NAME,'_jvhrnjy')
+        bb.append(e.text)
+        #print(e.text)
+        #print(e.get_attribute('class'))
+        
+        elem[i].click()
+        time.sleep(1)
+        bb.append(browser.current_url)
+        browser.execute_script("arguments[0].scrollIntoView(true);", elem[min(len(elem)-1,i+1)])
+        e = browser.find_elements(By.CLASS_NAME,'_z3fqkm')
+        if len(e)<4:
+            try:
+                e = browser.find_element(By.XPATH,'/html/body/div[2]/div/div/div[1]/div[1]/div[2]/div[2]/div/div/div/div/div[2]/div[2]/div/div[1]/div/div/div/div/div[2]/div[2]/div[1]/div[1]/div/div[2]/div[2]/div')
+                #print(e.text)                     
+                bb.append(e.text)
+            except:
+                bb.append('')
+        else:
+            e[2].click()
+            time.sleep(1)
+            e = browser.find_elements(By.CLASS_NAME,'_1sd01sa')
+            cc = []
+            for ee in e:
+                cc.append(ee.text)
+            bb.append(cc)
+        but = browser.find_elements(By.CLASS_NAME,'_1kmhi0c')
+        but[2].click()
+        time.sleep(2)
+        e = browser.find_elements(By.CLASS_NAME,'_49kxlr')
+        cc = []
+        for ee in e:
+            cc.append(ee.text)
+        bb.append(cc)
+        
+        if but[3].text == 'Отзывы':
+            but[3].click()
+            time.sleep(2)
+            e = browser.find_elements(By.CLASS_NAME,'_49kxlr')
+            cc = []
+            for ee in e:
+                cc.append(ee.text)
+            bb.append(cc)
+        #e2 = e.find_elements(By.XPATH,'//div[@class='']')
+        #,'/html/body/div[2]/div/div/div[1]/div[1]/div[2]/div[2]/div/div/div/div/div[2]/div[2]/div/div[1]/div/div/div/div/div[2]/div[2]/div[1]/div/div/div[1]/div[1]/div[2]/div/span')
+        #print(e.text)
+        #bb.append(e.text)
+        
+        
+        #e = browser.find_elements(By.CLASS_NAME,'_49kxlr')[3]
+        #'/html/body/div[2]/div/div/div[1]/div[1]/div[2]/div[2]/div/div/div/div/div[2]/div[2]/div/div[1]/div/div/div/div/div[2]/div[2]/div[1]/div/div/div[1]/div[2]/div[2]/div/span')
+        #print(e.text)                      
+        #bb.append(e.text)
+        #bb.append(browser.find_elements(By.CLASS_NAME,'_49kxlr')[7].text)
+        #bb.append(browser.find_elements(By.CLASS_NAME,'_49kxlr')[8].text)
+        
+        aa.append(bb)
+        
+    but_next[max(0,len(but_next)-1)].click()
+    time.sleep(5)
